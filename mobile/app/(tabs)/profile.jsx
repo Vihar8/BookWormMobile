@@ -5,6 +5,8 @@ import { useAuthStore } from '../../store/authStore';
 import styles from '../../assets/styles/profile.styles';
 import ProfileHeader from '../../components/ProfileHeader';
 import LogoutButton from '../../components/LogoutButton';
+import { API_URL } from "../../constants/api";
+
 
 
 export default function profile() {
@@ -19,8 +21,11 @@ export default function profile() {
     try{
       setIsLoading(true);
     
-          const response = await fetch(`${API_URL}/books/user`, {
-            headers:{ Authorization: `Bearer ${token}` },
+          const response = await fetch(`${API_URL}/books`, {
+            headers:{
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           });
           const data = await response.json();
           if(!response.ok) throw new Error(data.message || "Failed to fetch user book");
@@ -41,6 +46,10 @@ export default function profile() {
     <View style={styles.container}>
       {/* <ProfileHeader /> */}
       <LogoutButton />
+      <View style={styles.booksHeader}>
+      <Text style={styles.bookTitle}>Your Recommendation</Text>
+      <Text style={styles.booksCount}>{books.length}</Text>
+      </View>
     </View>
   )
 }
